@@ -22,6 +22,14 @@ group :development do
   gem 'web-console', '~> 2.0'
 end
 
+group :development, :test do
+  gem 'rspec-rails'
+  gem 'shoulda-matchers'
+  gem 'factory_bot_rails'
+  gem 'capybara'
+  gem 'pry-rails'
+end
+
 group :production do
   gem 'rails_12factor'
 end
