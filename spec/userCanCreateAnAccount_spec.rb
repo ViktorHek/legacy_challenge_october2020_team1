@@ -1,10 +1,10 @@
 feature 'User can create an account' do   
-
-  context "Successfully create an account [Happy Path]" do
-    before do
+  before do
       visit root_path
       click_on 'Sign up'
-    end
+  end
+
+  context "Successfully create an account [Happy Path]" do
 
   it 'User should see success message' do
     fill_in 'new_name', with: 'user712'
@@ -14,26 +14,74 @@ feature 'User can create an account' do
     click_on 'Create'
     expect(page).to have_content "Welcome! You have signed up successfully."
   end
-
-end
 end
 
- 
-  # let(:user) { FactoryBot.create(:user) }
-  # before do
-  # visit root_path
-  # click_on 'Sign up'
-  # end
+  context "User did't enter any name[Sad Path]" do
+   before do
+    fill_in 'new_name', with: ''
+    fill_in 'new_email', with: 'user712@test.com'
+    fill_in 'new_password', with: '12345678'
+    fill_in 'new_password_confirmation', with: '12345678'
+    click_on 'Create'
+  end
 
-  # it 'User should be on home page' do
-  #   article = Article.find_by(title: 'Happy holidays')
-  #   expect(current_path).to eq article_path(article)
-  # end
+  it 'User should see error message' do
+    expect(page).to have_content "Name can't be blank"
+  end
+end
 
-  # it 'User should see article title' do
-  #   expect(page).to have_content 'Happy holidays'
-  # end
+  context "User did't enter any email[Sad Path]" do
+   before do
+    fill_in 'new_name', with: 'user712'
+    fill_in 'new_password', with: '12345678'
+    fill_in 'new_password_confirmation', with: '12345678'
+    click_on 'Create'
+  end
 
-  # it 'User should see article content' do
-  #   expect(page).to have_content 'Buy your gifts now!'
-  # end
+  it 'User should see error message' do
+    expect(page).to have_content "Email can't be blank"
+  end
+end
+
+  context "User did't enter any password[Sad Path]" do
+   before do
+    fill_in 'new_email', with: 'user712@test.com'
+    fill_in 'new_name', with: 'user712'
+    fill_in 'new_password_confirmation', with: '12345678'
+    click_on 'Create'
+  end
+
+  it 'User should see error message' do
+    expect(page).to have_content "Password can't be blank"
+  end
+end
+
+  context "User did't enter any password confirmation[Sad Path]" do
+  before do
+    fill_in 'new_name', with: 'user712'
+    fill_in 'new_email', with: 'user712@test.com'
+    fill_in 'new_password', with: '12345678'
+    click_on 'Create'
+  end
+
+  it 'User should see error message' do
+    expect(page).to have_content "Password confirmation doesn't match Password"
+  end
+end
+
+  context "User entered a password shorter than 8 characters[Sad Path]" do
+  before do
+    fill_in 'new_name', with: 'user712'
+    fill_in 'new_email', with: 'user712@test.com'
+    fill_in 'new_password', with: '123456'
+    fill_in 'new_password_confirmation', with: '123456'
+    click_on 'Create'
+  end
+
+  it 'User should see error message' do
+    expect(page).to have_content "Password is too short (minimum is 8 characters)"
+  end
+
+end
+
+end
